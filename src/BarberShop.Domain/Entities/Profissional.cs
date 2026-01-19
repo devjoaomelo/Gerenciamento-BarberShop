@@ -1,35 +1,31 @@
 ﻿namespace BarberShop.Domain.Entities;
 
-public class Cliente : Entity
+public class Profissional : Entity
 {
     public string Nome { get; private set; }
     public string Telefone { get; private set; }
-    public DateTime DataNascimento { get; private set; }
     public string Email { get; private set; }
 
-    private Cliente() { }
+    private Profissional() { }
 
-    public Cliente(string nome, string telefone, DateTime dataNascimento, string email)
+    public Profissional(string nome, string telefone, string email)
     {
         Nome = nome;
         Telefone = telefone;
-        DataNascimento = dataNascimento;
         Email = email;
 
         Validar();
     }
 
-    public void Atualizar(string nome, string telefone, DateTime dataNascimento, string email)
+    public void Atualizar(string nome, string telefone,string email)
     {
         Nome = nome;
         Telefone = telefone;
-        DataNascimento = dataNascimento;
         Email = email;
 
         Validar();
         AtualizarDataModificacao();
     }
-
     private void Validar()
     {
         if (string.IsNullOrWhiteSpace(Nome))
@@ -46,14 +42,5 @@ public class Cliente : Entity
 
         if (!Email.Contains("@"))
             throw new ArgumentException("Email inválido", nameof(Email));
-
-        if (DataNascimento >= DateTime.UtcNow.Date)
-            throw new ArgumentException("Data de nascimento deve ser anterior à data atual", nameof(DataNascimento));
-
-        var idade = DateTime.UtcNow.Year - DataNascimento.Year;
-        if (DataNascimento.Date > DateTime.UtcNow.AddYears(-idade)) idade--;
-
-        if (idade < 0 || idade > 120)
-            throw new ArgumentException("Idade inválida", nameof(DataNascimento));
     }
 }
